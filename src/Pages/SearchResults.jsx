@@ -36,7 +36,6 @@ const SearchResults = () => {
             >
               <p>{movie.original_title}</p>
               <span>{movie.vote_average.toFixed(1)}</span>
-              {console.log(typeof movie.vote_average)}
             </div>
           </Link>
         );
