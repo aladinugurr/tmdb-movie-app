@@ -1,24 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 
-const SearchResults = () => {
-  const [searchedMovies, setSearchedMovies] = useState([]);
-  const params = useParams();
-
-  const getSearchedMovies = async () => {
-    const response = await fetch(
-      `https://api.themoviedb.org/3/search/movie?query=${params.name}&api_key=${process.env.REACT_APP_API_URL}`
-    );
-    const data = await response.json();
-    setSearchedMovies(data.results);
-  };
-
-  useEffect(() => {
-    getSearchedMovies();
-  }, [params.name]);
+const MovieList = ({ movieList }) => {
   return (
     <div className="m-5 p-5 flex flex-wrap gap-5 items-center justify-center lg:justify-start">
-      {searchedMovies.map((movie) => {
+      {movieList.map((movie) => {
         return (
           <Link
             to={`/movie/${movie.id}`}
@@ -32,7 +18,7 @@ const SearchResults = () => {
             />
             <div
               className="px-4 py-2 flex justify-between items-center absolute bg-slate-900 w-full h-auto
-					rounded-b-lg text-white bottom-[-10px] right-0 left-0"
+                  rounded-b-lg text-white bottom-[-10px] right-0 left-0"
             >
               <p>{movie.original_title}</p>
               <span>{movie.vote_average.toFixed(1)}</span>
@@ -44,4 +30,4 @@ const SearchResults = () => {
   );
 };
 
-export default SearchResults;
+export default MovieList;

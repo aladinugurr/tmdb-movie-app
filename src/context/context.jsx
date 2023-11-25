@@ -3,7 +3,13 @@ import React, { createContext, useState } from "react";
 export const ThemeContext = createContext();
 
 function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState(getThemeFromLS());
+
+  function getThemeFromLS() {
+    return localStorage.getItem("theme") || "light"; // Provide a default value if the theme is not set in localStorage
+  }
+
+  console.log(getThemeFromLS());
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>

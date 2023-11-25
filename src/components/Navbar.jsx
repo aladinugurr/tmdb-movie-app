@@ -11,7 +11,11 @@ const Navbar = () => {
   const { theme, setTheme } = useContext(ThemeContext);
 
   const handleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
+    setTheme((prevTheme) => {
+      const newTheme = prevTheme === "light" ? "dark" : "light";
+      localStorage.setItem("theme", newTheme);
+      return newTheme;
+    });
   };
 
   return (

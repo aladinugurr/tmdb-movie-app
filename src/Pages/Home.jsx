@@ -20,7 +20,6 @@ const Home = () => {
     // get first 2 item from popular movies and set it as currently watching
     const currentList = data.results.slice(0, 2);
     setCurrentlyWatchingList(currentList);
-    console.log(currentList);
   };
 
   const getPopular = async () => {
@@ -28,7 +27,6 @@ const Home = () => {
       `https://api.themoviedb.org/3/trending/movie/week?api_key=${process.env.REACT_APP_API_URL}`
     );
     const data = await res.json();
-
     setPopularMovies(data.results);
   };
 

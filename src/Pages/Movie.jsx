@@ -3,8 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import { FaRegBookmark } from "react-icons/fa";
 import { useDraggable } from "react-use-draggable-scroll";
 import ModalImage from "react-modal-image";
-import movieTrailer from "movie-trailer";
-import YouTube from "react-youtube";
 
 const Movie = () => {
   const [movie, setMovie] = useState({});
@@ -28,7 +26,6 @@ const Movie = () => {
     );
     const data = await response.json();
     setMovieImages(data.backdrops.slice(0, 10));
-    console.log(data);
   };
 
   const getRelated = async (id) => {
@@ -59,12 +56,13 @@ const Movie = () => {
             <div className="flex flex-col justify-evenly">
               <div className="flex">
                 {movie.genres?.map((genre) => (
-                  <span
+                  <Link
+                    to={`/search-by-genre/` + genre.id}
                     key={genre.id}
                     className="rounded-[20px] cursor-pointer border-2 border-black p-2 m-1 w-max"
                   >
                     {genre.name}
-                  </span>
+                  </Link>
                 ))}
               </div>
               <p className="w-[30vw] m-4">{movie.overview}</p>
