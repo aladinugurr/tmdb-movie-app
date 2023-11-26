@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDraggable } from "react-use-draggable-scroll";
+import MovieListWithScroll from "../components/MovieListWithScroll";
+import Movie from "../components/Movie";
 
 const Home = () => {
   const [popularMovies, setPopularMovies] = useState([]);
   const [currentlyWatchingList, setCurrentlyWatchingList] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
-  const ref = useRef();
-  const { events } = useDraggable(ref); // pass the reference to the useDraggable hook
 
   // get popular movies
   const getLatest = async () => {
@@ -43,13 +43,7 @@ const Home = () => {
           <h3 className="text-lg font-bold mb-3">Currently Watching</h3>
           <div className="flex gap-4 flex-wrap">
             {currentlyWatchingList.map((item) => (
-              <Link key={item.id} to={`/movie/${item.id}`}>
-                <img
-                  className="w-[177px] h-[263px] rounded-[1.5rem]"
-                  src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
-                  alt={item.original_title}
-                />
-              </Link>
+              <Movie movie={item} />
             ))}
           </div>
         </div>
@@ -57,35 +51,16 @@ const Home = () => {
           <h3 className="text-lg font-bold mb-3">Suggested to Watch</h3>
           <div className="flex gap-4 flex-wrap">
             {topRatedMovies.map((item) => (
-              <Link key={item.id} to={`/movie/${item.id}`}>
-                <img
-                  className="w-[177px] h-[263px] rounded-[1.5rem]"
-                  src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
-                  alt={item.original_title}
-                />
-              </Link>
+              <Movie movie={item} />
             ))}
           </div>
         </div>
       </div>
-      <div className="px-20 py-10">
-        <h3 className="text-lg font-bold mb-3">Popular Movies</h3>
-        <div
-          className="flex gap-4 flex-nowrap overflow-x-scroll no-scrollbar"
-          ref={ref}
-          {...events}
-        >
-          {popularMovies.map((item) => (
-            <Link key={item.id} to={`/movie/${item.id}`}>
-              <img
-                className="w-[177px] max-w-max h-[263px] rounded-[1.5rem]"
-                src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
-                alt=""
-              />
-            </Link>
-          ))}
-        </div>
-      </div>
+      <MovieListWithScroll
+        movieList={popularMovies}
+        title="Popular Movies"
+        className="px-20"
+      />
     </div>
   );
 };

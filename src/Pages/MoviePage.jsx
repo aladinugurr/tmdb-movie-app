@@ -3,8 +3,9 @@ import { Link, useParams } from "react-router-dom";
 import { FaRegBookmark } from "react-icons/fa";
 import { useDraggable } from "react-use-draggable-scroll";
 import ModalImage from "react-modal-image";
+import MovieListWithScroll from "../components/MovieListWithScroll";
 
-const Movie = () => {
+const MoviePage = () => {
   const [movie, setMovie] = useState({});
   const [movieImages, setMovieImages] = useState([]);
   const [related, setRelated] = useState([]);
@@ -20,20 +21,48 @@ const Movie = () => {
     setMovie(data);
   };
 
+  // **chatgpt düzeltti**
   const getImages = async (id) => {
-    const response = await fetch(
-      `https://api.themoviedb.org/3/movie/${id}/images?api_key=${process.env.REACT_APP_API_URL}`
-    );
-    const data = await response.json();
-    setMovieImages(data.backdrops.slice(0, 10));
+    try {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/${id}/images?api_key=${process.env.REACT_APP_API_URL}`
+      );
+      const data = await response.json();
+
+      // Kontrol: data.backdrops var mı? ve uzunluğu en az 1 mi?
+      if (data.backdrops?.length >= 1) {
+        // İlgili veri varsa, ilk 10 öğeyi al
+        setMovieImages(data.backdrops.slice(0, 10));
+      } else {
+        // İlgili veri yoksa veya uzunluğu 0 ise boş bir dizi kullan
+        setMovieImages([]);
+      }
+    } catch (error) {
+      console.error("Resimleri alırken bir hata oluştu:", error);
+      // Hata durumunda uygun bir şekilde işlem yapabilirsiniz.
+    }
   };
 
+  // **chatgpt düzeltti**
   const getRelated = async (id) => {
-    const response = await fetch(
-      `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=${process.env.REACT_APP_API_URL}`
-    );
-    const data = await response.json();
-    setRelated(data.results.slice(0, 10));
+    try {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=${process.env.REACT_APP_API_URL}`
+      );
+      const data = await response.json();
+
+      // Kontrol: data.results var mı? ve uzunluğu en az 1 mi?
+      if (data.results?.length >= 1) {
+        // İlgili veri varsa, ilk 10 öğeyi al
+        setRelated(data.results.slice(0, 10));
+      } else {
+        // İlgili veri yoksa veya uzunluğu 0 ise boş bir dizi kullan
+        setRelated([]);
+      }
+    } catch (error) {
+      console.error("İlgili filmleri alırken bir hata oluştu:", error);
+      // Hata durumunda uygun bir şekilde işlem yapabilirsiniz.
+    }
   };
 
   useEffect(() => {
@@ -113,24 +142,11 @@ const Movie = () => {
         <h3 className="text-lg font-bold mb-3">
           Also other peoples watched these
         </h3>
-        <div
-          className="flex gap-4 flex-nowrap overflow-x-scroll no-scrollbar"
-          ref={ref}
-          {...events}
-        >
-          {related.map((item) => (
-            <Link key={item.id} to={`/movie/${item.id}`}>
-              <img
-                src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
-                className="w-[177px] max-w-max h-[263px] rounded-[1.5rem] object-cover"
-                alt={movie.original_title}
-              />
-            </Link>
-          ))}
-        </div>
+
+        <MovieListWithScroll movieList={related} title="Related Movies" />
       </div>
     </div>
   );
 };
 
-export default Movie;
+export default MoviePage;

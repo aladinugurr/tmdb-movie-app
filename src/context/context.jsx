@@ -9,8 +9,6 @@ function ThemeProvider({ children }) {
     return localStorage.getItem("theme") || "light"; // Provide a default value if the theme is not set in localStorage
   }
 
-  console.log(getThemeFromLS());
-
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
       {children}
